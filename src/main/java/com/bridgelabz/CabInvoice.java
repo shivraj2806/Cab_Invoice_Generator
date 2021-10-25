@@ -7,6 +7,13 @@ public class CabInvoice {
     double COST_PER_KILOMETER=10;
     int COST_PER_MINUTE=1;
     double MINIMUM_FARE=5;
+    double COST_PER_KILOMETER_NORMAL=10;
+    int COST_PER_MINUTE_NORMAL=1;
+    double COST_PER_KILOMETER_PREMIUM=15;
+    int COST_PER_MINUTE_PREMIUM=2;
+    double MINIMUM_FARE_PREMIUM=20;
+
+
     public Map<Integer,RideDetails[]> rideDetails=new HashMap<>();
 
     public double totalFare(double kilometer,int minute){
@@ -47,5 +54,52 @@ public class CabInvoice {
             }
         }
         return null;
+    }
+
+    public double calculateCompute(double distance,int time,String type){
+        if(type.equalsIgnoreCase("normal")){
+            double fare=(distance * COST_PER_KILOMETER_NORMAL + time * COST_PER_MINUTE_NORMAL);
+            return Math.max(MINIMUM_FARE,fare);
+        }
+        else if(type.equalsIgnoreCase("premium")){
+            double fare=(distance * COST_PER_KILOMETER_PREMIUM + time * COST_PER_MINUTE_PREMIUM);
+            return Math.max(MINIMUM_FARE_PREMIUM,fare);
+        }
+        else
+            return 0;
+    }
+
+    public double calculateFareCompute(RideDetails[] ride,String type){
+        double fare=0.0;
+        if(type.equalsIgnoreCase("normal")){
+            for(RideDetails data: ride){
+                fare+=calculateCompute(data.getKilometer(),data.getTime(),type);
+            }
+            //return fare;
+        }
+        else if(type.equalsIgnoreCase("premium")){
+            for(RideDetails data1: ride){
+                fare +=calculateCompute(data1.getKilometer(),data1.getTime(),type);
+            }
+            //return fare;
+        }
+        return fare;
+    }
+
+    public CabInvoiceSummary calculateFare(RideDetails[] ride,String type){
+        double fare=0.0;
+        if(type.equalsIgnoreCase("normal")){
+            for(RideDetails data: ride){
+                fare+=calculateCompute(data.getKilometer(),data.getTime(),type);
+            }
+            //return fare;
+        }
+        else if(type.equalsIgnoreCase("premium")){
+            for(RideDetails data1: ride){
+                fare +=calculateCompute(data1.getKilometer(),data1.getTime(),type);
+            }
+            //return fare;
+        }
+        return new CabInvoiceSummary(ride.length, fare);
     }
 }

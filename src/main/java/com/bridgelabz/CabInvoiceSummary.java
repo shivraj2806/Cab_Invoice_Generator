@@ -19,8 +19,6 @@ public class CabInvoiceSummary {
         return this;
 
     }
-
-
     @Override
     public boolean equals(Object o){
         if (this == o)
